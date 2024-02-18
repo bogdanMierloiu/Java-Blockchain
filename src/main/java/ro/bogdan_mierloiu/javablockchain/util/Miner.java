@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ro.bogdan_mierloiu.javablockchain.core.Block;
 import ro.bogdan_mierloiu.javablockchain.core.BlockChain;
+import ro.bogdan_mierloiu.javablockchain.exception.InvalidBlockChainException;
 
 import java.util.List;
 
@@ -17,8 +18,7 @@ public class Miner {
 
     public void mine(Block block, BlockChain blockChain) {
         if (!isValidChain(blockChain)) {
-            log.error("Blockchain is not valid...");
-            return;
+            throw new InvalidBlockChainException("Block chain is not valid. The data was compromised.");
         }
         while (notGoldenHash(block)) {
             block.generateHash();

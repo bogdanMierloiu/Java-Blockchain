@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.bogdan_mierloiu.javablockchain.core.Block;
 import ro.bogdan_mierloiu.javablockchain.core.BlockChain;
 import ro.bogdan_mierloiu.javablockchain.core.Candidate;
-import ro.bogdan_mierloiu.javablockchain.repository.BlockRepository;
 import ro.bogdan_mierloiu.javablockchain.util.Miner;
 
 import java.time.LocalDateTime;
@@ -21,10 +20,8 @@ import java.util.List;
 public class VotingService {
 
     private final BlockChainService blockChainService;
-    private final CandidateService candidateService;
     private final Miner miner;
     private final ObjectMapper objectMapper;
-    private final BlockRepository blockRepository;
 
     @Transactional
     public void vote(Long candidateId) throws JsonProcessingException {
@@ -47,6 +44,6 @@ public class VotingService {
                 .nonce(0)
                 .build();
         voteBlock.generateHash();
-        miner.mine(voteBlock, blockChainService.getBlockChain());
+        miner.mine(voteBlock, blockChain);
     }
 }

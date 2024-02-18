@@ -1,13 +1,12 @@
 package ro.bogdan_mierloiu.javablockchain.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.bogdan_mierloiu.javablockchain.core.Block;
 import ro.bogdan_mierloiu.javablockchain.core.BlockChain;
+import ro.bogdan_mierloiu.javablockchain.dto.BlockChainResponse;
 import ro.bogdan_mierloiu.javablockchain.service.BlockChainService;
-import ro.bogdan_mierloiu.javablockchain.service.VotingService;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +14,11 @@ import ro.bogdan_mierloiu.javablockchain.service.VotingService;
 public class BlockChainController {
 
     private final BlockChainService blockChainService;
+
+    @GetMapping
+    public ResponseEntity<BlockChainResponse> getBlockChain() {
+        return ResponseEntity.ok(blockChainService.getBlockChainResponse());
+    }
 
     @PostMapping
     public ResponseEntity<BlockChain> initializeBlockChain(

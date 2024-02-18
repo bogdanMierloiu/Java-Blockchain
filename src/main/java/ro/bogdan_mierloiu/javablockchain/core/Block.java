@@ -1,13 +1,13 @@
 package ro.bogdan_mierloiu.javablockchain.core;
 
 import jakarta.persistence.*;
-import lombok.*;
-import ro.bogdan_mierloiu.javablockchain.util.JsonConverter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ro.bogdan_mierloiu.javablockchain.util.SHA256Helper;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -28,7 +28,7 @@ public class Block {
 
     private String hash;
 
-    @Column(length = 10000000)
+    @Column(length = 1024)
     private String data;
 
     private String description;

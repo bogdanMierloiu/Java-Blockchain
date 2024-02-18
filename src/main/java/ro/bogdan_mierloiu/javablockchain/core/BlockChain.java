@@ -19,6 +19,7 @@ public class BlockChain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, length = 64)
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "blockChain")
@@ -38,9 +39,7 @@ public class BlockChain {
 
     @Override
     public String toString() {
-        return "BlockChain{" +
-                "id=" + id +
-                '}';
+        return "BlockChain -> { name: " + name;
     }
 
     @Override
