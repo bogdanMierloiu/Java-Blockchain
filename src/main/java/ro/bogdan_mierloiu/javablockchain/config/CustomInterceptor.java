@@ -21,7 +21,7 @@ public class CustomInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!miner.isValidChain(blockChainService.getBlockChain()))
+        if (!request.getRequestURI().equals("/blockchain") && !miner.isValidChain(blockChainService.getBlockChain()))
             throw new InvalidBlockChainException("Block chain is not valid. The data was compromised.");
         return true;
     }
