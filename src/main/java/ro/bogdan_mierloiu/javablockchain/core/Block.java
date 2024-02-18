@@ -1,28 +1,41 @@
 package ro.bogdan_mierloiu.javablockchain.core;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import ro.bogdan_mierloiu.javablockchain.util.JsonConverter;
 import ro.bogdan_mierloiu.javablockchain.util.SHA256Helper;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@Entity
+@Builder
+@AllArgsConstructor
 public class Block {
-    private int id;
-    private int nonce;
-    private long timeStamp;
-    private String hash;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime timeStamp;
+
     private String previousHash;
+
+    private String hash;
+
+    @Column(length = 10000000)
     private String data;
 
-    public Block(int id, String data, String previousHash) {
-        this.id = id;
-        this.data = data;
-        this.previousHash = previousHash;
-        this.timeStamp = new Date().getTime();
-        generateHash();
-    }
+    private String description;
+
+    private int nonce;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private BlockChain blockChain;
 
     public void generateHash() {
         String dataToHash = id + previousHash + timeStamp + nonce + data;
@@ -36,5 +49,18 @@ public class Block {
     @Override
     public String toString() {
         return this.id + "-" + this.data + "-" + this.hash + "-" + this.previousHash + "-";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Block block = (Block) o;
+        return Objects.equals(id, block.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

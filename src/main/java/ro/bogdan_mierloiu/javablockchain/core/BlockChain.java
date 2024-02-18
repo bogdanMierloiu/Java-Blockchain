@@ -1,33 +1,58 @@
 package ro.bogdan_mierloiu.javablockchain.core;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Data
+@Entity
+@Builder
+@AllArgsConstructor
 public class BlockChain {
 
-    private List<Block> blockChain;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "blockChain")
+    private List<Block> chain;
 
     public BlockChain() {
-        this.blockChain = new ArrayList<>();
+        this.chain = new ArrayList<>();
     }
 
     public void addBlock(Block block) {
-        this.blockChain.add(block);
-    }
-
-    public List<Block> getBlockChain() {
-        return this.blockChain;
+        this.chain.add(block);
     }
 
     public int size() {
-        return this.blockChain.size();
+        return this.chain.size();
     }
 
     @Override
     public String toString() {
-        StringBuilder blockChain = new StringBuilder();
-        for (Block block : this.blockChain)
-            blockChain.append(block.toString()).append("\n");
-        return blockChain.toString();
+        return "BlockChain{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlockChain that = (BlockChain) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
