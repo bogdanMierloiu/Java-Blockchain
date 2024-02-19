@@ -36,7 +36,7 @@ public class WebController {
 
     @PostMapping("web/blockchain")
     public String initializeBlockChain(@ModelAttribute BlockChain blockChainRequest) {
-        BlockChain save = blockChainService.save(blockChainService.save(blockChainRequest));
+        blockChainService.save(blockChainService.save(blockChainRequest));
         return "redirect:/";
     }
 

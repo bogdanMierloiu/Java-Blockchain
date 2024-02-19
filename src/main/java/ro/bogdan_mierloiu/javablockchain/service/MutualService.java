@@ -13,8 +13,8 @@ public class MutualService {
 
     private final CandidateRepository candidateRepository;
 
-    public List<Candidate> getInitialCandidates() {
-        return candidateRepository.findAll().isEmpty() ? this.saveInitialCandidates() : candidateRepository.findAll();
+    public List<Candidate> getAllCandidates() {
+        return candidateRepository.findAll();
     }
 
     public List<Candidate> saveInitialCandidates() {

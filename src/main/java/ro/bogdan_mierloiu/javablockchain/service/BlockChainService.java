@@ -87,7 +87,7 @@ public class BlockChainService {
             Block genesisBlock = Block.builder()
                     .timeStamp(LocalDateTime.now())
                     .previousHash(Constant.GENESIS_PREV_HASH)
-                    .data(objectMapper.writeValueAsString(mutualService.getInitialCandidates()))
+                    .data(objectMapper.writeValueAsString(new ArrayList<>()))
                     .description("Genesis Block")
                     .blockChain(getBlockChain())
                     .nonce(0)

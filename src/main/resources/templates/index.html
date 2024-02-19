@@ -41,7 +41,7 @@
             </div>
         </div>
         <div th:unless="${blockChain == null}">
-            <div style="margin-bottom: 10px">
+            <div th:unless="${blockChain.chain.isEmpty()}" style="margin-bottom: 10px">
                 <form th:action="@{web/blockchain/candidate}" method="get">
                     <button type="submit" class="btn btn-outline-success bt-sm">Add Candidate</button>
                 </form>
