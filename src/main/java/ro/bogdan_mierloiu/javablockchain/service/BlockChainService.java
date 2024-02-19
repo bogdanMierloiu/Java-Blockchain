@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
@@ -55,8 +56,12 @@ public class BlockChainService {
         BlockChain blockChain = getBlockChain();
         try {
             String data = getLastBlock(blockChain).getData();
-            return objectMapper.readValue(data, new TypeReference<>() {
+            List<Candidate> candidates = objectMapper.readValue(data, new TypeReference<>() {
             });
+            return candidates.stream()
+                    .sorted((candidate1, candidate2) -> Math.toIntExact(candidate2.getVotes() - candidate1.getVotes()))
+                    .toList();
+
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to deserialize candidates from block data", e);
         } catch (NoSuchElementException e) {
