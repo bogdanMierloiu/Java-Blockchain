@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Entity
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class BlockChain {
 
     @Id
@@ -24,10 +26,6 @@ public class BlockChain {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "blockChain")
     private List<Block> chain;
-
-    public BlockChain() {
-        this.chain = new ArrayList<>();
-    }
 
     public void addBlock(Block block) {
         this.chain.add(block);

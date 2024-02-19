@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record BlockResponse(
+        Long id,
         LocalDateTime timestamp,
         String previousHash,
         String hash,

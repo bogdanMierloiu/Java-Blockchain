@@ -3,18 +3,87 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Authorization Server</title>
+    <title>Voting Blockchain</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
           crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link th:href="@{/style/style.css}" th:rel="stylesheet">
-    <link rel="icon" th:href="@{/img/icon.svg}"  type="image/x-icon">
+    <link rel="icon" th:href="@{/img/icon.svg}" type="image/x-icon">
 </head>
 <body>
 
-<div class="container">
+<div class="container-fluid" style="margin-top: 20px">
+    <div th:if="${blockChain == null}" class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <form th:action="@{/web/blockchain}" th:object="${blockChainRequest}" method="post">
+                            <label for="inputName">BlockChain name</label>
+                            <input type="text" th:field="*{name}" class="form-control"
+                                   id="inputName" aria-describedby="textHelp"
+                                   placeholder="Enter name">
+                            <button type="submit" class="btn btn-outline-success mt-2">Initialize</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div th:unless="${blockChain == null}">
+        <div th:if="${blockChain.chain.isEmpty()}" class="col-md-6">
+            <div class="form-group">
+                <form th:action="@{/web/blockchain/genesis}" method="post">
+                    <button type="submit" class="btn btn-outline-success mt-2">Generate Genesis Block</button>
+                </form>
+            </div>
+        </div>
+        <div th:unless="${blockChain == null}">
+            <div style="margin-bottom: 10px">
+                <form th:action="@{web/blockchain/candidate}" method="get">
+                    <button type="submit" class="btn btn-outline-success bt-sm">Add Candidate</button>
+                </form>
+            </div>
+            <div th:if="${candidates.size() > 0}">
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div th:each="candidate : ${candidates}"
+                         style="width: 30%; margin-bottom: 20px; border: 1px solid black; padding: 10px;">
+                        <h3 th:text="${candidate.name}"></h3>
+                        <p th:text="${candidate.description}"></p>
+                        <p>Votes: <span th:text="${candidate.votes}"></span></p>
+                        <form th:action="@{web/blockchain/vote/{candidateId}(candidateId=${candidate.id})}"
+                              method="post">
+                            <input type="hidden" th:value="candidate.id">
+                            <button type="submit" class="btn btn-outline-info bt-sm">Vote</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-</div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>TxId</th>
+                    <th>Timestamp</th>
+                    <th>Previous Hash</th>
+                    <th>Hash</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="block : ${blockChain.chain}">
+                    <td th:text="${block.id}"></td>
+                    <td th:text="${block.timestamp}"></td>
+                    <td th:text="${block.previousHash}"></td>
+                    <td th:text="${block.hash}"></td>
+                    <td th:text="${block.description}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 </body>
 </html>

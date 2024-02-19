@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -47,26 +48,33 @@ public class BlockChainService {
                 .orElse(null);
     }
 
-    public BlockChainResponse getBlockChainResponse() {
-        return BlockChainMapper.entityDoDto(getBlockChain());
+    public Optional<BlockChainResponse> getBlockChainResponse() {
+        BlockChain blockChain = getBlockChain();
+        if (nonNull(blockChain)) {
+            return Optional.of(BlockChainMapper.entityDoDto(blockChain));
+        }
+        return Optional.empty();
     }
 
     @Transactional(readOnly = true)
     public List<Candidate> getCandidatesFromChain() {
         BlockChain blockChain = getBlockChain();
-        try {
-            String data = getLastBlock(blockChain).getData();
-            List<Candidate> candidates = objectMapper.readValue(data, new TypeReference<>() {
-            });
-            return candidates.stream()
-                    .sorted((candidate1, candidate2) -> Math.toIntExact(candidate2.getVotes() - candidate1.getVotes()))
-                    .toList();
+        if (nonNull(blockChain) && (nonNull(blockChain.getChain()) && !blockChain.getChain().isEmpty())) {
+            try {
+                String data = getLastBlock(blockChain).getData();
+                List<Candidate> candidates = objectMapper.readValue(data, new TypeReference<>() {
+                });
+                return candidates.stream()
+                        .sorted((candidate1, candidate2) -> Math.toIntExact(candidate2.getVotes() - candidate1.getVotes()))
+                        .toList();
 
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to deserialize candidates from block data", e);
-        } catch (NoSuchElementException e) {
-            throw new IllegalStateException("No candidates found in the blockchain", e);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to deserialize candidates from block data", e);
+            } catch (NoSuchElementException e) {
+                throw new IllegalStateException("No candidates found in the blockchain", e);
+            }
         }
+        return new ArrayList<>();
     }
 
     public Block getLastBlock(BlockChain blockChain) {

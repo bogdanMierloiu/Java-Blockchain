@@ -12,6 +12,7 @@ public class BlockMapper {
 
     public static BlockResponse entityToDto(Block block) {
         return BlockResponse.builder()
+                .id(block.getId())
                 .timestamp(block.getTimeStamp())
                 .previousHash(block.getPreviousHash())
                 .hash(block.getHash())

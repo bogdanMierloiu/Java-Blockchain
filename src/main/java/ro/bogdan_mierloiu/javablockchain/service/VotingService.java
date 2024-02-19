@@ -25,6 +25,7 @@ public class VotingService {
 
     @Transactional
     public void vote(Long candidateId) throws JsonProcessingException {
+        //TODO -> add validation for unique vote -> ID card scanning provider ( check this person has not voted before )
         BlockChain blockChain = blockChainService.getBlockChain();
         Block lastBlock = blockChainService.getLastBlock(blockChain);
         List<Candidate> candidates = objectMapper.readValue(lastBlock.getData(), new TypeReference<>() {

@@ -17,7 +17,7 @@ public class BlockChainController {
 
     @GetMapping
     public ResponseEntity<BlockChainResponse> getBlockChain() {
-        return ResponseEntity.ok(blockChainService.getBlockChainResponse());
+        return ResponseEntity.ok(blockChainService.getBlockChainResponse().get());
     }
 
     @PostMapping
